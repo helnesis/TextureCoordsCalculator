@@ -1,9 +1,9 @@
 # Texture Coords Calculator GUI
 
+**Caution:** c
+
 ## Overview
 Calculates texture coordinates automatically, by selecting off the desired area directly through your .BLP file. If you are bored to do this manually, so this little application is specially designed for you :)
-
-
 
 ## Requirements for compiling
 
@@ -35,7 +35,5 @@ You're now ready to compile the project, through your favorite IDE or ``dotnet b
 ## Usage
 It is quiet easy, open ``TextureCoordsCalculatorGUI.exe``, open your texture, select the desired area. Coords will appear!
 
-
-## Example
-
 ![Texture Coords Calculator example](img/app.jpeg)
+
