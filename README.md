@@ -1,9 +1,10 @@
 # Texture Coords Calculator GUI
 
-**Caution:** c
+**Caution:** I hate making UI, so, yes, I know it is ugly. My apologies in advance (for your eyes)
 
 ## Overview
 Calculates texture coordinates automatically, by selecting off the desired area directly through your .BLP file. If you are bored to do this manually, so this little application is specially designed for you :)
+
 
 ## Requirements for compiling
 
