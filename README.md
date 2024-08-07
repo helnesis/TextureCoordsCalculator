@@ -1,9 +1,17 @@
-# Texture Coords Calculator GUI
+![Project Icon](img/inv_alchemy_70_potion2.jpg) Texture Coordinates Calculator
+--------------
 
-**Caution:** I hate making UI, so, yes, I know it is ugly. My apologies in advance (for your eyes)
+* [Overview](#overview)
+
+* [Requirements](#requirements-for-compiling)
+
+* [Build instructions](#build-instructions)
+
+* [Usage](#usage)
+
 
 ## Overview
-Calculates texture coordinates automatically, by selecting off the desired area directly through your .BLP file. If you are bored to do this manually, so this little application is specially designed for you :)
+Calculates texture coordinates automatically, by selecting off the desired area directly through your .BLP file. If you are tired to do this manually, so this little application is specially designed for you :)
 
 
 ## Requirements for compiling
@@ -38,3 +46,11 @@ It is quiet easy, open ``TextureCoordsCalculatorGUI.exe``, open your texture, se
 
 ![Texture Coords Calculator example](img/app.jpeg)
 
+You can also open a distant file, with [Wago](https://wago.tools/).
+
+![Texture Coords Calculator Fdid example](img/app-fid.png)
+
+
+## Caution
+
+C
