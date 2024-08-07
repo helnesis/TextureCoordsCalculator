@@ -41,7 +41,16 @@ git submodule update --init --recursive
 
 You're now ready to compile the project, through your favorite IDE or ``dotnet build``
 
+## Installation
+
+* Get the latest release [here](https://github.com/helnesis/TextureCoordsCalculator/releases)
+
+* Install .NET 8.0 Runtime [here](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.7-windows-x64-installer)
+
+Have fun !
+
 ## Usage
+
 It is quiet easy, open ``TextureCoordsCalculatorGUI.exe``, open your texture, select the desired area. Coords will appear!
 
 ![Texture Coords Calculator example](img/app.jpeg)
