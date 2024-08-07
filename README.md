@@ -53,4 +53,6 @@ You can also open a distant file, with [Wago](https://wago.tools/).
 
 ## Caution
 
-C
+I've developped this tool because I was tired of doing the coordinates manually. Since it was created for my specific use case, I do not guarantee that it will cover all potential use cases. But I'm open to all proposals.
+
+P.S : I hate making UI, so yes, it is ugly AF. My apologies in advance, for your eyes.
