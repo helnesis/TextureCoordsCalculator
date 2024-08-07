@@ -6,6 +6,9 @@ using System.Windows.Shapes;
 
 namespace TextureCoordsCalculatorGUI.Shared
 {
+    /// <summary>
+    /// Static Area
+    /// </summary>
     public sealed class Area
     {
         private static Rectangle? _area;

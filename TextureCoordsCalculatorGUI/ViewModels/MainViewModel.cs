@@ -3,7 +3,6 @@ using SWF = Microsoft.Win32;
 using TextureCoordsCalculatorGUI.Services;
 using SereniaBLPLib;
 using System.IO;
-using System.Diagnostics;
 using System.Windows;
 using TextureCoordsCalculatorGUI.Misc;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -14,8 +13,8 @@ using TextureCoordsCalculatorGUI.ViewModels.Base;
 using TextureCoordsCalculatorGUI.Views;
 using TextureCoordsCalculatorGUI.Shared;
 using System.Globalization;
-using System.Windows.Automation.Provider;
 using System.Collections.Immutable;
+using System.Diagnostics;
 
 namespace TextureCoordsCalculatorGUI.ViewModels
 {
@@ -26,6 +25,8 @@ namespace TextureCoordsCalculatorGUI.ViewModels
         private BlpFile? _blpFile;
 
         private Coordinates? _coordinates;
+
+        private TextureBrowserDialog _browser = new(wagoService);
 
         [ObservableProperty]
         string? normalizedCoords;
@@ -50,7 +51,6 @@ namespace TextureCoordsCalculatorGUI.ViewModels
 
         [ObservableProperty]
         string? croppedAreaLabel;
-
 
         [ObservableProperty]
         string? newCoords;
@@ -106,14 +106,27 @@ namespace TextureCoordsCalculatorGUI.ViewModels
             }
 
             if (_blpFile is not null)
+                ApplyImage();
+
+        }
+
+        [RelayCommand]
+        public async Task OpenBrowserAsync()
+        {
+            _browser.ShowDialog();
+    
+            var texture = _browser.SelectedTexture;
+
+            if (!string.IsNullOrEmpty(texture))
             {
-                BlpImage = BitMapToImg(_blpFile.GetBitmap(0));
+                var file = await _wagoService.GetCascFile(Listfile.Instance.GetFileDataId(texture));
 
-                ImageWidth = BlpImage.PixelWidth;
-                ImageHeight = BlpImage.PixelHeight;
+                if (file is not null)
+                {
+                    _blpFile = new BlpFile(file);
+                    ApplyImage();
+                }
             }
-
-
 
         }
 
@@ -122,19 +135,17 @@ namespace TextureCoordsCalculatorGUI.ViewModels
         {
             if (NewCoords is not null)
             {
-                // 0.6405762,0.73657227,0.06318359,0.2692383
                 var rawCoords = NewCoords.Split(',')
-                    .Where(x => float.TryParse(x, NumberStyles.Any, provider: CultureInfo.InvariantCulture, out var n))
+                    .Where(x => float.TryParse(x, NumberStyles.Any, provider: CultureInfo.InvariantCulture, out var _))
                     .Select(x => float.Parse(x, NumberStyles.Any, provider: CultureInfo.InvariantCulture)).ToImmutableArray();
 
 
-                float leftCoords = rawCoords[0];
-                float rightCoords = rawCoords[1];
-                float topCoords = rawCoords[2];
-                float bottomCoords = rawCoords[3];
+                float leftCoords = rawCoords.ElementAtOrDefault(0);
+                float rightCoords = rawCoords.ElementAtOrDefault(1);
+                float topCoords = rawCoords.ElementAtOrDefault(2);
+                float bottomCoords = rawCoords.ElementAtOrDefault(3);
 
                 Area.Move(leftCoords, rightCoords, topCoords, bottomCoords);
-
                 NormalizedCoords = $"{NormalizeFloat(leftCoords)},{NormalizeFloat(rightCoords)},{NormalizeFloat(topCoords)},{NormalizeFloat(bottomCoords)}";
             }
 
@@ -199,22 +210,21 @@ namespace TextureCoordsCalculatorGUI.ViewModels
             }
         }
 
+
+        private void ApplyImage()
+        {
+            if (_blpFile is null)
+                return;
+
+            BlpImage = Utilities.BitMapToImg(_blpFile.GetBitmap(0));
+
+            ImageWidth = BlpImage.PixelWidth;
+            ImageHeight = BlpImage.PixelHeight;
+        }
+
         private static string NormalizeFloat(float value)
                 => value.ToString().Replace(',', '.');
 
-        private static BitmapImage BitMapToImg(Bitmap bitmap)
-        {
-            using MemoryStream memory = new();
 
-            bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-            memory.Position = 0;
-            var bitmapImage = new BitmapImage();
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = memory;
-            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-            bitmapImage.EndInit();
-
-            return bitmapImage;
-        }
     }
 }

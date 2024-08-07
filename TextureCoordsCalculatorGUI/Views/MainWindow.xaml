@@ -31,7 +31,7 @@
                 <MenuItem FontFamily="Arial" Header="_File">
                     <MenuItem FontFamily="Arial" Header="_Open local file" Command="{Binding OpenImageFileCommand}" CommandParameter="{StaticResource BoolFalse}"/>
                     <MenuItem FontFamily="Arial" Header="_Open distant file" Command="{Binding OpenImageFileCommand}" CommandParameter="{StaticResource BoolTrue}"/>
-                    <MenuItem FontFamily="Arial" Header="_Texture Browser"/>
+                    <MenuItem FontFamily="Arial" Header="_Texture Browser" Command="{Binding OpenBrowserCommand}"/>
                 </MenuItem>
             </Menu>
 
