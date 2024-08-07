@@ -32,9 +32,6 @@
                     <MenuItem FontFamily="Arial" Header="_Open local file" Command="{Binding OpenImageFileCommand}" CommandParameter="{StaticResource BoolFalse}"/>
                     <MenuItem FontFamily="Arial" Header="_Open distant file" Command="{Binding OpenImageFileCommand}" CommandParameter="{StaticResource BoolTrue}"/>
                 </MenuItem>
-                <MenuItem FontFamily="Arial" Header="_Help">
-                    <MenuItem FontFamily="Arial" Header="_About"/>
-                </MenuItem>
             </Menu>
 
             <StackPanel Orientation="Horizontal" >
