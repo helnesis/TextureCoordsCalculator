@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using TextureCoordsCalculatorGUI.Services;
+using TextureCoordsCalculatorGUI.Shared;
 using TextureCoordsCalculatorGUI.ViewModels;
 
 namespace TextureCoordsCalculatorGUI
@@ -31,11 +32,12 @@ namespace TextureCoordsCalculatorGUI
             
         }
 
-        private static void ConfigureServices(IServiceCollection services)
+        private void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<WagoService>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<MainWindow>();
+            services.AddSingleton<Area>();
        
         }
     }

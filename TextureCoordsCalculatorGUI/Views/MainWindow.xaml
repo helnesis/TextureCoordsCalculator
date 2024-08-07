@@ -8,8 +8,8 @@
         xmlns:local="clr-namespace:TextureCoordsCalculatorGUI" xmlns:viewmodels="clr-namespace:TextureCoordsCalculatorGUI.ViewModels" xmlns:sys="clr-namespace:System;assembly=netstandard" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
-        Title="{Binding WindowTitle}" Height="Auto" Width="Auto">
+        ResizeMode="CanResize"
+        Title="{Binding WindowTitle}">
 
     <Window.Resources>
         <sys:Boolean x:Key="BoolTrue">True</sys:Boolean>
@@ -18,8 +18,8 @@
 
     <Grid Background="DarkGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="500"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -31,6 +31,7 @@
                 <MenuItem FontFamily="Arial" Header="_File">
                     <MenuItem FontFamily="Arial" Header="_Open local file" Command="{Binding OpenImageFileCommand}" CommandParameter="{StaticResource BoolFalse}"/>
                     <MenuItem FontFamily="Arial" Header="_Open distant file" Command="{Binding OpenImageFileCommand}" CommandParameter="{StaticResource BoolTrue}"/>
+                    <MenuItem FontFamily="Arial" Header="_Texture Browser"/>
                 </MenuItem>
             </Menu>
 
@@ -44,8 +45,43 @@
                 <Button Margin="5" Content="Copy XML Code" Command="{Binding CopyAsCommand}" CommandParameter="xml"/>
             </StackPanel>
             
-            <Label FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Arial" Content="Cropped texture"/>
-            <Image VerticalAlignment="Center" x:Name="Texture" Source="{Binding CroppedImage}" Width="{Binding CroppedImageWidth}" Height="{Binding CroppedImageHeight}"/>
+            <Label FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Arial" Content="Cropped Area"/>
+            <Image VerticalAlignment="Center" x:Name="Texture" Source="{Binding CroppedImage}" Width="{Binding CroppedImageWidth}" Height="{Binding CroppedImageHeight}" Stretch="UniformToFill"/>
+
+            <Label HorizontalAlignment="Left" FontFamily="Arial" FontWeight="Bold" Content="Area properties"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <Label Content="Width" Grid.Row="0" Grid.Column="0"/>
+                <TextBox Text="{Binding CroppedImageWidth}" Name="Width" Margin="2" Grid.Row="0" Grid.Column="1">
+                </TextBox>
+
+                <Label Content="Height" Grid.Row="1" Grid.Column="0"/>
+                <TextBox Text="{Binding CroppedImageHeight}" Name="Height" Margin="2" Grid.Row="1" Grid.Column="1">
+                </TextBox>
+
+                <Label Content="Go to coords " Grid.Row="2" Grid.Column="0"/>
+                <TextBox Text="{Binding NewCoords}" Margin="2" Grid.Row="2" Grid.Column="1"/>
+
+
+            </Grid>
+
+
+            <Button HorizontalAlignment="Center" Content="Apply changes" Command="{Binding ApplyChangesCommand}"/>
+
+
         </StackPanel>
 
         <ScrollViewer Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Top" Margin="10">

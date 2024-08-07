@@ -12,6 +12,10 @@ using System.Windows.Media.Imaging;
 using Point = System.Windows.Point;
 using TextureCoordsCalculatorGUI.ViewModels.Base;
 using TextureCoordsCalculatorGUI.Views;
+using TextureCoordsCalculatorGUI.Shared;
+using System.Globalization;
+using System.Windows.Automation.Provider;
+using System.Collections.Immutable;
 
 namespace TextureCoordsCalculatorGUI.ViewModels
 {
@@ -43,6 +47,13 @@ namespace TextureCoordsCalculatorGUI.ViewModels
 
         [ObservableProperty]
         int croppedImageHeight;
+
+        [ObservableProperty]
+        string? croppedAreaLabel;
+
+
+        [ObservableProperty]
+        string? newCoords;
 
         /// <summary>
         /// Open a .blp file, locally or directly through Wago API.
@@ -106,6 +117,32 @@ namespace TextureCoordsCalculatorGUI.ViewModels
 
         }
 
+        [RelayCommand]
+        public void ApplyChanges()
+        {
+            if (NewCoords is not null)
+            {
+                // 0.6405762,0.73657227,0.06318359,0.2692383
+                var rawCoords = NewCoords.Split(',')
+                    .Where(x => float.TryParse(x, NumberStyles.Any, provider: CultureInfo.InvariantCulture, out var n))
+                    .Select(x => float.Parse(x, NumberStyles.Any, provider: CultureInfo.InvariantCulture)).ToImmutableArray();
+
+
+                float leftCoords = rawCoords[0];
+                float rightCoords = rawCoords[1];
+                float topCoords = rawCoords[2];
+                float bottomCoords = rawCoords[3];
+
+                Area.Move(leftCoords, rightCoords, topCoords, bottomCoords);
+
+                NormalizedCoords = $"{NormalizeFloat(leftCoords)},{NormalizeFloat(rightCoords)},{NormalizeFloat(topCoords)},{NormalizeFloat(bottomCoords)}";
+            }
+
+
+            if (CroppedImageWidth > 0 && CroppedImageHeight > 0)
+                Area.Resize(CroppedImageWidth, CroppedImageHeight);
+        }
+
 
         [RelayCommand]
         public void CopyAs(string type)
@@ -142,18 +179,22 @@ namespace TextureCoordsCalculatorGUI.ViewModels
             }
         }
 
+        public void UpdateCroppedAreaLabel(int width, int height)
+        {
+            CroppedAreaLabel = $"Size: {width}x{height}";
+        }
+
         private void CalculateCroppedImage(Point leftTopPixels, Point bottomRightPixels)
         {
             var width = (int)(bottomRightPixels.X - leftTopPixels.X);
             var height = (int)(bottomRightPixels.Y - leftTopPixels.Y);
 
-            if (width > 0 && height > 0)
+            if (width > 0 && height > 0 && leftTopPixels.X > 0 && leftTopPixels.Y > 0)
             {
                 var crop = new CroppedBitmap(BlpImage, new((int)leftTopPixels.X, (int)leftTopPixels.Y, width, height));
                 CroppedImage = crop;
-                CroppedImageHeight = crop.PixelHeight;
-                CroppedImageWidth = crop.PixelWidth;
-
+                CroppedImageHeight = height;
+                CroppedImageWidth = width;
 
             }
         }
