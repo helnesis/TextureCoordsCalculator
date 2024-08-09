@@ -21,7 +21,7 @@ namespace TextureCoordsCalculatorGUI.ViewModels
     public partial class MainViewModel(WagoService wagoService) : BaseViewModel("Texture Coordinates Calculator")
     {
         private readonly IWagoService _wagoService = wagoService;
- 
+
         private BlpFile? _blpFile;
 
         private Coordinates? _coordinates;
@@ -87,7 +87,7 @@ namespace TextureCoordsCalculatorGUI.ViewModels
                 if (result.HasValue && result.Value)
                 {
                     var stream = await _wagoService.GetCascFile((uint)inputDialog.FileDataId);
-                    
+
                     if (stream is not null)
                     {
                         try
@@ -100,9 +100,9 @@ namespace TextureCoordsCalculatorGUI.ViewModels
                             return;
                         }
                     }
-     
+
                 }
-        
+
             }
 
             if (_blpFile is not null)
@@ -114,7 +114,7 @@ namespace TextureCoordsCalculatorGUI.ViewModels
         public async Task OpenBrowserAsync()
         {
             _browser.ShowDialog();
-    
+
             var texture = _browser.SelectedTexture;
 
             if (!string.IsNullOrEmpty(texture))
@@ -186,7 +186,7 @@ namespace TextureCoordsCalculatorGUI.ViewModels
             if (_coordinates is not null)
             {
                 NormalizedCoords = $"{NormalizeFloat(_coordinates.Left)},{NormalizeFloat(_coordinates.Right)},{NormalizeFloat(_coordinates.Top)},{NormalizeFloat(_coordinates.Bottom)}";
-                CalculateCroppedImage(leftTopPixels, bottomRightPixels);    
+                CalculateCroppedImage(leftTopPixels, bottomRightPixels);
             }
         }
 
@@ -200,13 +200,12 @@ namespace TextureCoordsCalculatorGUI.ViewModels
             var width = (int)(bottomRightPixels.X - leftTopPixels.X);
             var height = (int)(bottomRightPixels.Y - leftTopPixels.Y);
 
-            if (width > 0 && height > 0 && leftTopPixels.X > 0 && leftTopPixels.Y > 0)
+            if (width > 0 && height > 0 && leftTopPixels.X >= 0 && leftTopPixels.Y >= 0 && bottomRightPixels.X <= ImageWidth && bottomRightPixels.Y <= ImageHeight)
             {
-                var crop = new CroppedBitmap(BlpImage, new((int)leftTopPixels.X, (int)leftTopPixels.Y, width, height));
+                var crop = new CroppedBitmap(BlpImage, new Int32Rect((int)leftTopPixels.X, (int)leftTopPixels.Y, width, height));
                 CroppedImage = crop;
                 CroppedImageHeight = height;
                 CroppedImageWidth = width;
-
             }
         }
 
