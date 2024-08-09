@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
+        Height="800" Width="800"
         Title="{Binding WindowTitle}">
 
     <Window.Resources>

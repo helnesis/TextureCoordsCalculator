@@ -34,7 +34,7 @@ namespace TextureCoordsCalculatorGUI.Misc
             {
                 var record = csvReader.GetRecord<ListfileRecord>();
 
-                if (record.FilePath.EndsWith(".blp"))
+                if (record.FilePath.EndsWith(".blp") && record.FilePath.StartsWith("interface/"))
                 {
                     _listFile.TryAdd(record.FilePath, record.FileDataId);
                 }

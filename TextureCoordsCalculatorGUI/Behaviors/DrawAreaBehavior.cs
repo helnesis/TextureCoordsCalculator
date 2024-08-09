@@ -215,14 +215,14 @@ namespace TextureCoordsCalculatorGUI.Behaviors
                     break;
             }
 
-            Area.Rectangle.Width = right - left;
-            Area.Rectangle.Height = bottom - top;
+            Area.Rectangle.Width = Math.Max(0, right - left);
+            Area.Rectangle.Height = Math.Max(0, bottom - top);
 
             Canvas.SetLeft(Area.Rectangle, left);
             Canvas.SetTop(Area.Rectangle, top);
         }
 
-        private bool IsOnResizeHandle(Point pos, out ResizeDirection direction)
+        private static bool IsOnResizeHandle(Point pos, out ResizeDirection direction)
         {
             if (Area.Rectangle is null)
             {

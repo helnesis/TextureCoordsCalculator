@@ -20,13 +20,11 @@ namespace TextureCoordsCalculatorGUI.ViewModels
 {
     public partial class MainViewModel(WagoService wagoService) : BaseViewModel("Texture Coordinates Calculator")
     {
-        private readonly IWagoService _wagoService = wagoService;
+        private readonly WagoService _wagoService = wagoService;
  
         private BlpFile? _blpFile;
 
         private Coordinates? _coordinates;
-
-        private TextureBrowserDialog _browser = new(wagoService);
 
         [ObservableProperty]
         string? normalizedCoords;
@@ -113,9 +111,12 @@ namespace TextureCoordsCalculatorGUI.ViewModels
         [RelayCommand]
         public async Task OpenBrowserAsync()
         {
-            _browser.ShowDialog();
+
+            var browser = new TextureBrowserDialog(_wagoService);
+
+            browser.ShowDialog();
     
-            var texture = _browser.SelectedTexture;
+            var texture = browser.SelectedTexture;
 
             if (!string.IsNullOrEmpty(texture))
             {
@@ -200,13 +201,17 @@ namespace TextureCoordsCalculatorGUI.ViewModels
             var width = (int)(bottomRightPixels.X - leftTopPixels.X);
             var height = (int)(bottomRightPixels.Y - leftTopPixels.Y);
 
-            if (width > 0 && height > 0 && leftTopPixels.X > 0 && leftTopPixels.Y > 0)
+            if (BlpImage != null &&
+            width > 0 && height > 0 &&
+            leftTopPixels.X >= 0 && leftTopPixels.Y >= 0 &&
+            bottomRightPixels.X <= BlpImage.PixelWidth && bottomRightPixels.Y <= BlpImage.PixelHeight)
             {
-                var crop = new CroppedBitmap(BlpImage, new((int)leftTopPixels.X, (int)leftTopPixels.Y, width, height));
-                CroppedImage = crop;
-                CroppedImageHeight = height;
-                CroppedImageWidth = width;
-
+     
+                    var crop = new CroppedBitmap(BlpImage, new((int)leftTopPixels.X, (int)leftTopPixels.Y, width, height));
+                    CroppedImage = crop;
+                    CroppedImageHeight = height;
+                    CroppedImageWidth = width;
+ 
             }
         }
 
